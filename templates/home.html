@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">FluentHands</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/main/">Practice</a>
+            <a href="/learn/">Learn</a>
+            <div class="profile_container" id="profileBtn">
+                <img src="{{ url_for('static', filename=user.profile_picture) }}" alt="pfp" class="pfp">
+                {{ user.username }}
+                <div class="dropdown" id="profileMenu">
+                    <button onclick="profile('{{ user.username }}')">Profile</button>
+                    {% if user.role == 'Admin' %}
+                        <button onclick="dashboard()">Dashboard</button>
+                    {% endif %}
+                    <button id="logoutBtn" data-href="{{ url_for('auth.logout') }}"> Logout </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="welcome-section">
+            <h1 class="welcome-title">Ready to connect?</h1>
+            <p class="welcome-subtitle">Start or join a game</p>
+        </div>
+        
+        <button class="btn" onclick="practicebtn()">Practice</button>
+
+        <form method="post" class="buttons">
+            <div class="join">
+                <input type="text" placeholder="Enter room code" name="code" value="{{ code }}"/>
+                <button type="submit" name="join">Join</button>
+            </div>
+            <button type="submit" name="create">Create a room</button>
+            {% if error %}
+                <ul>
+                    <li>{{error}}</li>
+                </ul>
+            {% endif %}
+        </form>
+
+        <button class="learning-mats" onclick="learnasl()">Learn ASL!</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const profileBtn = document.getElementById("profileBtn");
+            const profileMenu = document.getElementById("profileMenu");
+
+            profileBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
+                profileMenu.style.display = 
+                    profileMenu.style.display === "flex" ? "none" : "flex";
+            });
+
+            document.addEventListener("click", function() {
+                profileMenu.style.display = "none";
+            });
+        });
+
+        function profile(username) {
+            window.location.href = `${window.location.origin}/profile/${username}`;
+        }
+
+        function dashboard() {
+            window.location.href = `${window.location.origin}/admin/dashboard`;
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", function() {
+            window.location.href = `${window.location.origin}${this.dataset.href}`;
+        });
+
+        function practicebtn() {
+            window.location.href = `${window.location.origin}/main/`;
+        }
+
+        function learnasl() {
+            window.location.href = `${window.location.origin}/learn/`;
+        }
+
+        function userprofile(username) {
+            window.location.href = `${window.location.origin}/profile/${username}`;
+        }
+    </script>
+</body>
+</html>

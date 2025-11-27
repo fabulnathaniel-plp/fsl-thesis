@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_hand.css') }}">
+    <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <!-- in order-->
+    <script src="{{ url_for('static', filename='js/clientSideClassifier.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/signLanguageDetector.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">FluentHands</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/main/">Practice</a>
+            <a href="/learn/">Learn</a>
+            <div class="profile_container" id="profileBtn">
+                <img src="{{ url_for('static', filename=user.profile_picture) }}" alt="pfp" class="pfp">
+                {{ user.username }}
+                <div class="dropdown" id="profileMenu">
+                    <button onclick="profile('{{ user.username }}')">Profile</button>
+                    {% if user.role == 'Admin' %}
+                        <button onclick="dashboard()">Dashboard</button>
+                    {% endif %}
+                    <button id="logoutBtn" data-href="{{ url_for('auth.logout') }}"> Logout </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <!-- User Info Panel -->
+        {% if user %}
+        <div class="user-info">
+            <div class="user-welcome">
+                <div class="user-avatar">{{ user.username[0].upper() }}</div>
+                <div>
+                    <div style="font-size: 1.1rem;">Welcome back, <strong>{{ user.username }}</strong>!</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8;">Ready to practice sign language?</div>
+                </div>
+            </div>
+            <div class="select-model">
+                <select id="select-model" name="Select Model">
+                    <option value="" disabled selected>Select Learning Material</option>
+                    <option value="alphabet">Alphabet</option>
+                    <option value="number">Numbers</option>
+                </select>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="video-container">
+            <video id="videoElement" autoplay muted></video>
+            <canvas id="canvas"></canvas>
+            <div id="fpsCounter" class="fps-counter">FPS: 0</div>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn" class="btn">Start Camera</button>
+            <button id="toggleProcessing" class="btn" disabled>Start Detection</button>
+        </div>
+
+        <div class="results">
+            <div class="result-card">
+                <h3>Detected Gesture</h3>
+                <div id="prediction" class="result-value">No gesture</div>
+            </div>
+            <div class="result-card">
+                <h3>Confidence</h3>
+                <div id="confidence" class="result-value">0%</div>
+                <div class="confidence-bar">
+                    <div id="confidenceBar" class="confidence-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>Instructions:</h3>
+            <ul>
+                <li>Select a learning material from the dropdown (Alphabet or Numbers)</li>
+                <li>Click "Start Camera" to access your webcam</li>
+                <li>Click "Start Detection" to begin sign language recognition</li>
+                <li>Show your hand gestures to the camera</li>
+                <li>The system will detect and classify your signs in real-time</li>
+                <li>Make sure your hands are well-lit and clearly visible</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const profileBtn = document.getElementById("profileBtn");
+            const profileMenu = document.getElementById("profileMenu");
+
+            profileBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
+                profileMenu.style.display = 
+                    profileMenu.style.display === "flex" ? "none" : "flex";
+            });
+
+            // Close menu if clicking outside
+            document.addEventListener("click", function() {
+                profileMenu.style.display = "none";
+            });
+        });
+
+        document.getElementById("logoutBtn").addEventListener("click", function() {
+            window.location.href = `${window.location.origin}${this.dataset.href}`;
+        });
+    </script>
+</body>
+</html>
