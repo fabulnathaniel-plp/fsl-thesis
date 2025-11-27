@@ -1,0 +1,87 @@
+body {
+  background-image: url('../images/Categories.png');
+  background-size: fit;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+}
+
+.logo {
+  position: absolute;
+  top: 2vh;
+  left: 2vw;
+  width: clamp(80px, 12vw, 160px);
+  height: auto;
+  z-index: 10;
+  filter: brightness(0) invert(1);
+}
+
+.button-wrapper {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 40px;
+  row-gap: 0;
+  padding-top: 3vh;             
+}
+
+.icon-button {
+  width: 15vw;
+  height: 45vh;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon-button:hover {
+  transform: scale(1.05);
+}
+
+.alphabet-btn {
+  background-image: url('../images/alphabets.png');
+}
+
+.numbers-btn {
+  background-image: url('../images/numbers.png');
+}
+
+.words-btn {
+  background-image: url('../images/words.png');
+}
+
+
+.top-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70vw;
+}
+
+.categories {
+    top: 14vh;
+    font-size: 8.2vh;
+    color: white;
+    font-family: "Gantari", sans-serif;
+    font-weight: 800;
+}
+
+.back {
+  color: white;
+  top: 20vh;
+  font-family: "Gantari", sans-serif;
+
+}
